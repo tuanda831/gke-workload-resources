@@ -1,4 +1,4 @@
-import { ApiProperty, ApiResponseProperty } from '@nestjs/swagger';
+import { ApiProperty } from '@nestjs/swagger';
 
 export class ProductIdDTO {
   @ApiProperty()
@@ -24,29 +24,29 @@ export class ProductDTO {
   @ApiProperty()
   description: string;
 
-  @ApiProperty()
-  price: number;
+  // @ApiProperty()
+  // price: number;
 
-  @ApiProperty()
-  images: string[];
+  // @ApiProperty()
+  // images: string[];
 
-  @ApiResponseProperty({
-    example: 'yyyy-MM-ddThh:mm:ss.123Z',
-  })
-  createdAt: string;
+  // @ApiResponseProperty({
+  //   example: 'yyyy-MM-ddThh:mm:ss.123Z',
+  // })
+  // createdAt: string;
 
-  @ApiResponseProperty({
-    example: 'yyyy-MM-ddThh:mm:ss.123Z',
-  })
-  updatedAt: string;
+  // @ApiResponseProperty({
+  //   example: 'yyyy-MM-ddThh:mm:ss.123Z',
+  // })
+  // updatedAt: string;
 
-  @ApiResponseProperty({
-    example: 'yyyy-MM-ddThh:mm:ss.123Z',
-  })
-  deletedAt: string;
+  // @ApiResponseProperty({
+  //   example: 'yyyy-MM-ddThh:mm:ss.123Z',
+  // })
+  // deletedAt: string;
 
-  @ApiResponseProperty({
-    example: 'yyyy-MM-ddThh:mm:ss.123Z',
-  })
-  restoredAt: string;
+  // @ApiResponseProperty({
+  //   example: 'yyyy-MM-ddThh:mm:ss.123Z',
+  // })
+  // restoredAt: string;
 }

@@ -1,6 +1,6 @@
 <p align="center">
     <a href="#">
-        <img src="https://i0.wp.com/zenatta.com/wp-content/uploads/2020/08/inventory-256.png?fit=300%2C300&ssl=1" height="100" alt="Inventory Service">
+        <img src="https://www.logomoose.com/wp-content/uploads/2017/09/search.jpg" height="100" alt="Inventory Service">
     </a>
 </p>
 
@@ -12,7 +12,7 @@
     <img src="https://img.shields.io/badge/license-Apache2-blue.svg?style=flat" alt="Apache 2">
 </p>
 
-# [Inventory Service](https://www.linkedin.com/in/tuando831/)
+# [Search Service](https://www.linkedin.com/in/tuando831/)
 
 ## Table of Contents
 1. [Features](#features)
@@ -27,24 +27,26 @@
 ## Features
 
 The Inventory service will provides the following features:
-- [x] CRUD://inventoy/products
-- [ ] CRUD://inventoy/products/:id/product-variants
-- [ ] CRUD://inventoy/product-category
-- [ ] CRUD://inventoy/product-attributes
+- [x] Consume Product CRUD event
+- [x] GET://search/products?kw=
+- [ ] Consume Blog CRUD event
+- [ ] GET://search/blogs?kw=
+- [ ] GET://search/suggestion?kw=
+- [ ] CLI tool to re-index all Products
+- [ ] CLI tool to re-index all Blogs
 
 ## Tech stack 
 
-- [x] Dev environment with [docker-compose](https://www.docker.com/)
-- [x] Database with [PostgreSql](postgresql.org)
-- [x] Dependency injection with [nestjs](https://nestjs.com/)
-- [x] Database migration with knexjs [knexjs](https://jestjs.io/)
-- [x] REST services using [3 layers pattern](https://www.ecanarys.com/Blogs/ArticleID/76/3-Layered-Architecture)
-- [x] Data Access Layer use [typeorm](https://typeorm.io/)
-- [x] TDD environment with [Jest](https://jestjs.io/)
-- [x] E2E testing [Supertest](https://www.npmjs.com/package/supertest)
-- [x] Swagger documentation using [@nestjs/swagger](https://www.npmjs.com/package/@nestjs/swagger)
-- [x] Logging using `nest-winston`
-- [ ] Event Sourcing using [Temporal](https://temporal.io/)
+- [ ] Dev environment with [docker-compose](https://www.docker.com/)
+- [ ] Dependency injection with [nestjs](https://nestjs.com/)
+- [ ] Database with [ElasticSearch](https://www.elastic.co/)
+- [ ] Database migration
+- [ ] REST services using [3 layers pattern](https://www.ecanarys.com/Blogs/ArticleID/76/3-Layered-Architecture)
+- [ ] TDD environment with [Jest](https://jestjs.io/)
+- [ ] E2E testing [Supertest](https://www.npmjs.com/package/supertest)
+- [ ] Swagger documentation using [@nestjs/swagger](https://www.npmjs.com/package/@nestjs/swagger)
+- [ ] Logging using `nest-winston`
+- [ ] Event Sourcing using [Kafka](https://kafka.apache.org/)
 - [ ] DevOps pipeline with [Github CI](https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-nodejs)
 
 ## Run the Dev Environment
@@ -72,15 +74,7 @@ npm start
 
 ### Access Resource in Local environment
 
-1. Connect with PostgreSQL
-
-    > Recommend [TablePlus](https://tableplus.com/), dbeaver
-
-    ```
-    POSTGRES_USER=dev_user
-    POSTGRES_PASSWORD=dev_pass
-    POSTGRES_DB=inventory_db
-    ```
+1. Connect with ElasticSearch with Kibana
 
 2. APIs URL: http://localhost:3000
 
@@ -93,12 +87,8 @@ Will update later...
 ## Source Structure
 ![Source Structure](docs/structure.drawio.png "Title")
 
-## Database Design
-![Database diagram](docs/database.drawio.png "Title")
-
 ## Use cases
-- [Product CRUD](docs/product-crud.md)
-- [Product variant](docs/product-variant.md)
+- [Product Indexing](docs/product-crud.md)
 
 ## License
 

@@ -9,7 +9,6 @@ import { LoggerFactory } from './services/logger/logger-factory';
 
 async function bootstrap() {
   const app = await NestFactory.create(ApisModule);
-
   const config = app.get(ConfigService);
 
   app.useLogger(LoggerFactory(config, new ConsoleLogger()));

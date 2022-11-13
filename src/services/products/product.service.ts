@@ -1,23 +1,24 @@
+import { QueryDslQueryContainer } from '@elastic/elasticsearch/api/types';
 import { Inject, Injectable } from '@nestjs/common';
 import { Product } from 'src/dto/entity/product/product.entiry';
-import { Repository } from 'typeorm';
+import { ProductRepository } from '../../repository/product/product.repository';
 
 @Injectable()
 export class ProductService {
   constructor(
-    @Inject(Repository<Product>)
-    private productRepository: Repository<Product>,
+    @Inject(ProductRepository)
+    private productRepository: ProductRepository,
   ) {}
 
-  gets(): Promise<Product[]> {
-    return this.productRepository.find();
+  index(product: Product) {
+    this.productRepository.index(product);
   }
 
-  save(product: Product): Promise<Product> {
-    return this.productRepository.save(product);
+  bulkIndex(products: Product[]) {
+    this.productRepository.bulk(products);
   }
 
-  saveBulk(products: Product[]): Promise<Product[]> {
-    return this.productRepository.save(products);
+  search(query: QueryDslQueryContainer): Promise<Product[]> {
+    return this.productRepository.search(query);
   }
 }

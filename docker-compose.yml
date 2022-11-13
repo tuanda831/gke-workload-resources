@@ -1,18 +1,35 @@
 version: '3'
 
 services:
-  db:
-    image: postgres:14.5
-    ports:
-      - "5432:5432"
-    restart: always
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.8.1
     environment:
-      POSTGRES_USER: dev_user
-      POSTGRES_PASSWORD: dev_pass
-      POSTGRES_DB: inventory_db
+      - discovery.type=single-node
+      - xpack.security.enabled=true
+      - ELASTIC_PASSWORD=dev_pass
+      - bootstrap.memory_lock=true
+      - ES_JAVA_OPTS=-Xms512m -Xmx512m
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    mem_limit: 1g
+    ports:
+      - 9200:9200
     networks:
       - dev_network
-  
+  kibana:
+    image: 'docker.elastic.co/kibana/kibana:7.8.1'
+    environment:
+      ELASTICSEARCH_HOSTS: http://elasticsearch:9200
+    volumes:
+      - ./docker/kibana.yml:/usr/share/kibana/config/kibana.yml
+    ports:
+      - '5601:5601'
+    networks:
+      - dev_network
+    depends_on:
+      - elasticsearch
   zookeeper:
     image: confluentinc/cp-zookeeper:7.0.1
     container_name: zookeeper

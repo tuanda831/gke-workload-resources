@@ -1,26 +1,20 @@
+import { Client } from '@elastic/elasticsearch';
 import { ConfigService } from '@nestjs/config';
-import { DataSource } from 'typeorm';
-import { Product } from '../dto/entity/product/product.entiry';
 
 export const databaseProviders = [
   {
-    provide: DataSource,
+    provide: Client,
     useFactory: async (config: ConfigService) => {
-      const dataSource = new DataSource({
-        type: 'postgres',
-        host: config.get<string>('DB__HOST'),
-        port: config.get<number>('DB__PORT'),
-        username: config.get<string>('DB__USER'),
-        password: config.get<string>('DB__PASSWORD'),
-        database: config.get<string>('DB__NAME'),
-        synchronize: true,
-        logging: config.get<boolean>('DB__LOGGING'),
-        entities: [Product],
-        subscribers: [],
-        migrations: [],
+      return new Client({
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        nodes: config.get<string>('ELASTICSEARCH__NODES')?.split(','),
+        auth: {
+          username: config.get<string>('ELASTICSEARCH__AUTH_USER') || '',
+          password: config.get<string>('ELASTICSEARCH__AUTH_PASS') || '',
+        },
       });
-
-      return dataSource.initialize();
     },
     inject: [ConfigService],
   },
