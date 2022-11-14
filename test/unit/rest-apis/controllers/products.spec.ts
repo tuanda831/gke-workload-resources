@@ -1,33 +1,28 @@
-import { ConfigService } from '@nestjs/config';
-import { ClientKafka } from '@nestjs/microservices';
+import { QueryDslQueryContainer } from '@elastic/elasticsearch/api/types';
 import { Response } from 'express';
-import { Repository } from 'typeorm';
+import { ProductRepository } from 'src/repository/product/product.repository';
 import { Product } from '../../../../src/dto/entity/product/product.entiry';
 import { ProductController } from '../../../../src/rest-apis/controllers/products.controller';
-import { ProductCreationRequest } from '../../../../src/rest-apis/requests/products/product-creation.request';
 import { ProductService } from '../../../../src/services/products/product.service';
 
-const results = new Product();
 let controller: ProductController;
 let productService: ProductService;
-let productRepository: Repository<Product>;
-let eventClient: ClientKafka;
-let config: ConfigService;
+let productRepository: ProductRepository;
 
 describe('ProductController', () => {
   beforeEach(async () => {
     productService = new ProductService(productRepository);
-    controller = new ProductController(productService, eventClient, config);
+    controller = new ProductController(productService);
   });
 
   describe('/products (POST)', () => {
-    const request: ProductCreationRequest = {
+    const product: Product = {
+      id: '123-123-123-123',
+      shortCode: '123',
       sku: '123',
       barcode: '99999',
       name: 'New Product',
       description: 'Product Description here',
-      images: ['https://test1.link', 'https://test2.link'],
-      price: 1.98,
     };
 
     let res: Response;
@@ -40,33 +35,30 @@ describe('ProductController', () => {
       expect(true).toBe(true);
     });
 
-    it('Should successful insert a record to the DB', async () => {
+    it('Should successful call productService.search successfully', async () => {
+      const kw = 'test keyword';
       jest
-        .spyOn(productService, 'save')
-        .mockImplementation((product: Product) => {
-          expect(product.sku).toBe(request.sku);
-          expect(product.barcode).toBe(request.barcode);
-          expect(product.name).toBe(request.name);
-          expect(product.description).toBe(request.description);
-          expect(product.images).toBe(request.images);
-          expect(product.price).toBe(request.price);
+        .spyOn(productService, 'search')
+        .mockImplementation(
+          (query: QueryDslQueryContainer): Promise<Product[]> => {
+            expect(query.match?.name).toBe(kw);
 
-          return Promise.resolve(results);
-        });
+            return Promise.resolve([product]);
+          },
+        );
 
       res = {
         status: (code: any): Response => {
-          expect(code).toBe(201);
+          expect(code).toBe(200);
           return {
-            send({ message, data }) {
-              expect(message).toBe('"Product" is Created!');
-              expect(data).toBe(results);
+            send({ data }) {
+              expect(data).toMatchObject([product]);
             },
           } as Response;
         },
       } as Response;
 
-      await controller.create(res, request);
+      await controller.gets(kw, res);
     });
   });
 });
